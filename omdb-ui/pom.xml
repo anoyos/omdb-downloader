@@ -6,23 +6,28 @@
 		<artifactId>omdb-downloader</artifactId>
 		<version>0.1</version>
 	</parent>
-	<artifactId>omdb-persistence</artifactId>
+	<artifactId>omdb-ui</artifactId>
+	<packaging>war</packaging>
 
 	<dependencies>
 		<dependency>
 			<groupId>net.sprava</groupId>
-			<artifactId>omdb-model</artifactId>
+			<artifactId>omdb-service</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-jpa</artifactId>
-			<version>1.9.4.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>5.1.0.Final</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+			<version>${spring.boot.version}</version>
 		</dependency>
 	</dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
