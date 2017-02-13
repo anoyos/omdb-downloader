@@ -10,6 +10,7 @@
 		<module>omdb-model</module>
 		<module>omdb-persistence</module>
 		<module>omdb-service</module>
+		<module>omdb-ui</module>
 	</modules>
 
 	<properties>
