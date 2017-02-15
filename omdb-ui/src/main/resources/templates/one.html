@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${movie.title}"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<h1 th:text="${movie.title}"/>
+<img th:src="${movie.poster}"/>
+<body>
+	<ul>
+		<li><b>Year:</b> <span th:text="${movie.year}"/></li>
+		<li><b>Rated:</b> <span th:text="${movie.title}"/></li>
+		<li><b>Released:</b> <span th:text="${movie.rated}"/></li>
+		<li><b>Runtime:</b> <span th:text="${movie.released}"/></li>
+		<li><b>Genre:</b> <span th:text="${movie.genre}"/></li>
+		<li><b>Director:</b> <span th:text="${movie.runtime}"/></li>
+		<li><b>Writer:</b> <span th:text="${movie.writer}"/></li>
+		<li><b>Actors:</b> <span th:text="${movie.actors}"/></li>
+		<li><b>Plot:</b> <span th:text="${movie.plot}"/></li>
+		<li><b>Language:</b> <span th:text="${movie.language}"/></li>
+		<li><b>Country:</b> <span th:text="${movie.country}"/></li>
+		<li><b>Awards:</b> <span th:text="${movie.awards}"/></li>
+		<li><b>Metascore:</b> <span th:text="${movie.metascore}"/></li>
+		<li><b>imdbRating:</b> <span th:text="${movie.imdbRating}"/></li>
+		<li><b>imdbVotes:</b> <span th:text="${movie.imdbVotes}"/></li>
+		<li><b>imdbID:</b> <span th:text="${movie.imdbId}"/></li>
+		<li><b>Type:</b> <span th:text="${movie.type}"/></li>
+		<li><b>Response:</b> <span th:text="${movie.response}"/></li>
+	</ul>
+
+	<form action="/showOne" method="post" style="margin-top: 50px;">
+		<input type="hidden" name="imdbId" th:value="${movie.imdbId}"/>
+		<input type="submit" value="Download"/>
+	</form>
+	<p><b>Status:</b> <em th:text="${statusMessage}"/></p>
+
+	<a href="/" style="margin-top: 50px;">Back</a>
+</body>
+</html>

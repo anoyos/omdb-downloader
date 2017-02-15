@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Movies by keyword</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<form action="/" method="post" style="margin-bottom: 50px;">
+		<p>Select a movie keyword for search:</p>
+		<select name="keyword">
+			<option value="arrow">arrow</option>
+			<option value="batman">batman</option>
+		</select>
+		<input type="submit" value="Select it"/>
+	</form>
+	
+	<ul th:each="movie : ${movies}" style="list-style-type: none; margin-left: 0; padding-left: 0;">
+		<li><a th:href="@{/showOne(imdbId=${movie.imdbId})}" th:text="${movie.title}"/></li>
+	</ul>
+
+	<form action="/downloadList" method="post" style="margin-top: 50px;">
+		<input type="hidden" name="keyword" th:value="${keyword}"/>
+		<input type="submit" value="Download"/>
+	</form>
+	<p><b>Status:</b> <em th:text="${statusMessage}"/></p>
+</body>
+</html>
