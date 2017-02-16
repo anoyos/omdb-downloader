@@ -63,10 +63,17 @@ public class BatchConfig {
 	}
 
 	@Bean
-	public Job importMovieJob() {
+	public Job downloadMovieJob() {
 		return jobBuilderFactory.get("downloadMovieJob")
 				.start(step1())
 				.build();
 	}
 
+	/*
+	@Bean
+	public StepScope stepScope() {
+		StepScope stepScope = new StepScope();
+		return stepScope;
+	}
+	*/
 }

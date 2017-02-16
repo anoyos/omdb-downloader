@@ -1,13 +1,16 @@
 package net.sprava.omdb.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.log4j.Logger;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.launch.JobLauncher;
@@ -96,7 +99,10 @@ public class OmdbServiceImpl implements OmdbService {
 			return "Nothing has been downloaded. Keyword doesn't set.";
 		} else {
 			try {
-				JobExecution jobExecution = jobLauncher.run(job, new JobParameters());
+				Map<String, JobParameter> parameters = new HashMap<String, JobParameter>();
+				parameters.put("keyword", new JobParameter(keyword));
+				
+				JobExecution jobExecution = jobLauncher.run(job, new JobParameters(parameters));
 				BatchStatus status;
 				do {
 					status = jobExecution.getStatus();
