@@ -67,12 +67,12 @@ public class OmdbServiceImpl implements OmdbService {
 	}
 
 	@Override
-	public String downloadMovieListUsual(String keyword) {
+	public String downloadMovieListUsual(String title, String year) {
 
-		if (keyword.isEmpty()) {
-			return "Nothing has been downloaded. Keyword doesn't set.";
+		if (title.isEmpty()) {
+			return "Nothing has been downloaded. Title doesn't set.";
 		} else {
-			List<Movie> movies = omnbRestClient.getMoviesByKeyword(keyword);
+			List<Movie> movies = omnbRestClient.getMoviesByTitleAndYear(title, year);
 
 			movies.forEach(movie -> {
 				String imdbId = movie.getImdbId();
@@ -93,14 +93,15 @@ public class OmdbServiceImpl implements OmdbService {
 	}
 
 	@Override
-	public String downloadMovieListBatch(String keyword) {
+	public String downloadMovieListBatch(String title, String year) {
 
-		if (keyword.isEmpty()) {
-			return "Nothing has been downloaded. Keyword doesn't set.";
+		if (title.isEmpty()) {
+			return "Nothing has been downloaded. Title doesn't set.";
 		} else {
 			try {
 				Map<String, JobParameter> parameters = new HashMap<String, JobParameter>();
-				parameters.put("keyword", new JobParameter(keyword));
+				parameters.put("title", new JobParameter(title));
+				parameters.put("year", new JobParameter(year));
 				
 				JobExecution jobExecution = jobLauncher.run(job, new JobParameters(parameters));
 				BatchStatus status;

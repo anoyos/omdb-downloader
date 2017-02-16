@@ -2,6 +2,7 @@ package net.sprava.omdb.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -34,18 +35,20 @@ public class OmdbRestClientImpl implements OmdbRestClient {
 	}
 
 	@Override
-	public List<Movie> getMoviesByKeyword(String keyword) {
+	public List<Movie> getMoviesByTitleAndYear(String title, String year) {
 
 		RestTemplate restTemplate = new RestTemplate();
 		ObjectMapper mapper = new ObjectMapper();
 
 		ResponseEntity<String> response = restTemplate.getForEntity(
-				REST_SERVICE_URI + "?s=" + keyword + "&y=2016&plot=short&r=json&type=movie", String.class);
+				REST_SERVICE_URI + "?s=" + title + "&y=" + year + "&plot=short&r=json&type=movie", String.class);
 
 		JsonNode moviesJson = null;
 		try {
 			JsonNode root = mapper.readTree(response.getBody());
-			moviesJson = root.path("Search");
+			if (root.has("Search")) {
+				moviesJson = root.path("Search");
+			}
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -53,20 +56,23 @@ public class OmdbRestClientImpl implements OmdbRestClient {
 		}
 
 		List<Movie> movies = null;
-		try {
-			movies = mapper.readValue(moviesJson.toString(), new TypeReference<List<Movie>>() {
-			});
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (Optional.ofNullable(moviesJson).isPresent()) {
+			try {
+				movies = mapper.readValue(moviesJson.toString(), new TypeReference<List<Movie>>() {
+				});
+			} catch (JsonParseException e) {
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 		/*
-		 * movies.stream() .map(m -> m.getTitle())
-		 * .forEach(System.out::println);
+		 * movies.stream()
+		 * 		.map(m -> m.getTitle())
+		 * 		.forEach(System.out::println);
 		 */
 
 		return movies;

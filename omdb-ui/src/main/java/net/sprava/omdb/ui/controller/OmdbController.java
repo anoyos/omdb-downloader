@@ -1,5 +1,8 @@
 package net.sprava.omdb.ui.controller;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import net.sprava.omdb.model.Movie;
 import net.sprava.omdb.persistence.MovieRepository;
 import net.sprava.omdb.service.OmdbRestClient;
 import net.sprava.omdb.service.OmdbService;
@@ -29,29 +33,40 @@ public class OmdbController {
 	MovieRepository movieRepository;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String selectYear(Model model) {
-		model.addAttribute("statusMessage", "Nothing selected for download.");
+	public String serachForm(Model model) {
+		model.addAttribute("statusMessage", "No movies was selected for download.");
 		return "list";
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public String getMovieList(@RequestParam(required = true) String keyword, Model model) {
-		model.addAttribute("movies", omnbRestClient.getMoviesByKeyword(keyword));
-		model.addAttribute("keyword", keyword);
-		model.addAttribute("statusMessage", "Now you can download selected movies.");
+	public String getMovieList(@RequestParam(required = true) String title, String year, Model model) {
+		if (title.isEmpty()) {
+			model.addAttribute("statusMessage", "The Title field is required.");
+		} else {
+			List<Movie> movies = omnbRestClient.getMoviesByTitleAndYear(title, year);
+			if (Optional.ofNullable(movies).isPresent()) {
+				model.addAttribute("movies", movies);
+				model.addAttribute("title", title);
+				model.addAttribute("year", year);
+				model.addAttribute("statusMessage", "Now you can download selected movies.");
+			}
+			else {
+				model.addAttribute("statusMessage", "Movies not found.");
+			}
+		}
 		return "list";
 	}
 
 	@RequestMapping(value = "/downloadListUsual", method = RequestMethod.POST)
-	public String downloadMovieListUsual(@RequestParam(required = true) String keyword, Model model) {
-		String statusMessage = omnbService.downloadMovieListUsual(keyword);
+	public String downloadMovieListUsual(@RequestParam(required = true) String title, String year, Model model) {
+		String statusMessage = omnbService.downloadMovieListUsual(title, year);
 		model.addAttribute("statusMessage", statusMessage);
 		return "list";
 	}
 
 	@RequestMapping(value = "/downloadListBatch", method = RequestMethod.POST)
-	public String downloadMovieListBatch(@RequestParam(required = true) String keyword, Model model) {
-		String statusMessage = omnbService.downloadMovieListBatch(keyword);
+	public String downloadMovieListBatch(@RequestParam(required = true) String title, String year, Model model) {
+		String statusMessage = omnbService.downloadMovieListBatch(title, year);
 		model.addAttribute("statusMessage", statusMessage);
 		return "list";
 	}

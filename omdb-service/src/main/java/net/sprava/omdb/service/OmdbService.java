@@ -13,9 +13,9 @@ public interface OmdbService {
 
 	public String downloadMovie(String imdbId);
 
-	public String downloadMovieListUsual(String keyword);
+	public String downloadMovieListUsual(String title, String year);
 
-	public String downloadMovieListBatch(String keyword);
+	public String downloadMovieListBatch(String title, String year);
 
 	public void saveMovieListToDb(List<Movie> movies);
 }

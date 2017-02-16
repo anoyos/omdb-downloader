@@ -22,8 +22,8 @@ public class OmdbRestMovieReader implements ItemReader<Movie> {
 	@Autowired
 	OmdbRestClient omnbRestClient;
 
-	// @Value("#{jobParameters['keyword']}")
-	// private String keyword;
+	// @Value("#{jobParameters['title']}")
+	// private String title;
 
 	private int nextMovieIndex = 0;
 	private List<Movie> movies;
@@ -31,7 +31,7 @@ public class OmdbRestMovieReader implements ItemReader<Movie> {
 	@BeforeStep
 	public void getAllMovies(final StepExecution stepExecution) {
 		JobParameters parameters = stepExecution.getJobExecution().getJobParameters();
-		movies = omnbRestClient.getMoviesByKeyword(parameters.getString("keyword"));
+		movies = omnbRestClient.getMoviesByTitleAndYear(parameters.getString("title"), parameters.getString("year"));
 	}
 
 	@Override

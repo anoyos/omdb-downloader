@@ -9,11 +9,11 @@
 <body>
 	<ul>
 		<li><b>Year:</b> <span th:text="${movie.year}"/></li>
-		<li><b>Rated:</b> <span th:text="${movie.title}"/></li>
-		<li><b>Released:</b> <span th:text="${movie.rated}"/></li>
-		<li><b>Runtime:</b> <span th:text="${movie.released}"/></li>
+		<li><b>Rated:</b> <span th:text="${movie.rated}"/></li>
+		<li><b>Released:</b> <span th:text="${movie.released}"/></li>
+		<li><b>Runtime:</b> <span th:text="${movie.runtime}"/></li>
 		<li><b>Genre:</b> <span th:text="${movie.genre}"/></li>
-		<li><b>Director:</b> <span th:text="${movie.runtime}"/></li>
+		<li><b>Director:</b> <span th:text="${movie.director}"/></li>
 		<li><b>Writer:</b> <span th:text="${movie.writer}"/></li>
 		<li><b>Actors:</b> <span th:text="${movie.actors}"/></li>
 		<li><b>Plot:</b> <span th:text="${movie.plot}"/></li>
@@ -30,7 +30,7 @@
 
 	<form action="/showOne" method="post" style="margin-top: 50px;">
 		<input type="hidden" name="imdbId" th:value="${movie.imdbId}"/>
-		<input type="submit" value="Download"/>
+		<input type="submit" value="Usual download"/>
 	</form>
 	<p><b>Status:</b> <em th:text="${statusMessage}"/></p>
 
