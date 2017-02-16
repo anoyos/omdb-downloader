@@ -22,7 +22,7 @@ import net.sprava.omdb.model.Movie;
  *
  */
 @Service
-public class OmnbRestClientImpl implements OmnbRestClient {
+public class OmdbRestClientImpl implements OmdbRestClient {
 
 	private static final String REST_SERVICE_URI = "http://www.omdbapi.com/";
 
@@ -65,9 +65,8 @@ public class OmnbRestClientImpl implements OmnbRestClient {
 		}
 
 		/*
-		 * movies.stream()
-		 * 		.map(m -> m.getTitle())
-		 * 		.forEach(System.out::println);
+		 * movies.stream() .map(m -> m.getTitle())
+		 * .forEach(System.out::println);
 		 */
 
 		return movies;

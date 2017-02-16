@@ -8,7 +8,7 @@ import net.sprava.omdb.model.Movie;
  * @author Nikolay Koretskyy
  *
  */
-public interface OmnbRestClient {
+public interface OmdbRestClient {
 
 	public Movie getMovie(String imdbId);
 

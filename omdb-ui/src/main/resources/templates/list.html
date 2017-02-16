@@ -18,10 +18,16 @@
 		<li><a th:href="@{/showOne(imdbId=${movie.imdbId})}" th:text="${movie.title}"/></li>
 	</ul>
 
-	<form action="/downloadList" method="post" style="margin-top: 50px;">
+	<form action="/downloadListUsual" method="post" style="margin-top: 50px;">
 		<input type="hidden" name="keyword" th:value="${keyword}"/>
-		<input type="submit" value="Download"/>
+		<input type="submit" value="Usual download"/>
 	</form>
+
+	<form action="/downloadListBatch" method="post" style="margin-top: 20px;">
+		<input type="hidden" name="keyword" th:value="${keyword}"/>
+		<input type="submit" value="Batch download"/>
+	</form>
+
 	<p><b>Status:</b> <em th:text="${statusMessage}"/></p>
 </body>
 </html>

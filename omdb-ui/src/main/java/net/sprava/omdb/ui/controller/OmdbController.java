@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import net.sprava.omdb.persistence.MovieRepository;
-import net.sprava.omdb.service.OmnbRestClient;
-import net.sprava.omdb.service.OmnbService;
+import net.sprava.omdb.service.OmdbRestClient;
+import net.sprava.omdb.service.OmdbService;
 
 /**
  *
@@ -20,10 +20,10 @@ import net.sprava.omdb.service.OmnbService;
 public class OmdbController {
 
 	@Autowired
-	OmnbRestClient omnbRestClientImpl;
+	OmdbRestClient omnbRestClient;
 
 	@Autowired
-	OmnbService omnbServiceImpl;
+	OmdbService omnbService;
 
 	@Autowired
 	MovieRepository movieRepository;
@@ -36,29 +36,36 @@ public class OmdbController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public String getMovieList(@RequestParam(required = true) String keyword, Model model) {
-		model.addAttribute("movies", omnbRestClientImpl.getMoviesByKeyword(keyword));
+		model.addAttribute("movies", omnbRestClient.getMoviesByKeyword(keyword));
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("statusMessage", "Now you can download selected movies.");
 		return "list";
 	}
 
-	@RequestMapping(value = "/downloadList", method = RequestMethod.POST)
-	public String downloadMovieList(@RequestParam(required = true) String keyword, Model model) {
-		String statusMessage = omnbServiceImpl.downloadMovieList(keyword);
+	@RequestMapping(value = "/downloadListUsual", method = RequestMethod.POST)
+	public String downloadMovieListUsual(@RequestParam(required = true) String keyword, Model model) {
+		String statusMessage = omnbService.downloadMovieListUsual(keyword);
+		model.addAttribute("statusMessage", statusMessage);
+		return "list";
+	}
+
+	@RequestMapping(value = "/downloadListBatch", method = RequestMethod.POST)
+	public String downloadMovieListBatch(@RequestParam(required = true) String keyword, Model model) {
+		String statusMessage = omnbService.downloadMovieListBatch(keyword);
 		model.addAttribute("statusMessage", statusMessage);
 		return "list";
 	}
 
 	@RequestMapping(value = "/showOne", method = RequestMethod.GET)
 	public String getOneMovie(@RequestParam(required = true) String imdbId, Model model) {
-		model.addAttribute("movie", omnbRestClientImpl.getMovie(imdbId));
+		model.addAttribute("movie", omnbRestClient.getMovie(imdbId));
 		model.addAttribute("statusMessage", "Now you can download selected movie.");
 		return "one";
 	}
 
 	@RequestMapping(value = "/showOne", method = RequestMethod.POST)
 	public String downloadMovie(@RequestParam(required = true) String imdbId, Model model) {
-		String statusMessage = omnbServiceImpl.downloadMovie(imdbId);
+		String statusMessage = omnbService.downloadMovie(imdbId);
 		model.addAttribute("movie", movieRepository.findByImdbId(imdbId));
 		model.addAttribute("statusMessage", statusMessage);
 		return "one";
