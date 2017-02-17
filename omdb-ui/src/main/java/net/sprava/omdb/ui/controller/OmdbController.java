@@ -43,7 +43,8 @@ public class OmdbController {
 		if (title.isEmpty()) {
 			model.addAttribute("statusMessage", "The Title field is required.");
 		} else {
-			List<Movie> movies = omnbRestClient.getMoviesByTitleAndYear(title, year);
+			// List<Movie> movies = omnbRestClient.getAllMoviesByTitleAndYear(title, year);
+			List<Movie> movies = omnbRestClient.getFirstPageMoviesByTitleAndYear(title, year);
 			if (Optional.ofNullable(movies).isPresent()) {
 				model.addAttribute("movies", movies);
 				model.addAttribute("title", title);

@@ -35,15 +35,17 @@ public class OmdbRestClientImpl implements OmdbRestClient {
 	}
 
 	@Override
-	public List<Movie> getMoviesByTitleAndYear(String title, String year) {
+	public List<Movie> getFirstPageMoviesByTitleAndYear(String title, String year) {
 
 		RestTemplate restTemplate = new RestTemplate();
 		ObjectMapper mapper = new ObjectMapper();
 
+		JsonNode moviesJson = null;
+		List<Movie> movies = null;
+
 		ResponseEntity<String> response = restTemplate.getForEntity(
 				REST_SERVICE_URI + "?s=" + title + "&y=" + year + "&plot=short&r=json&type=movie", String.class);
 
-		JsonNode moviesJson = null;
 		try {
 			JsonNode root = mapper.readTree(response.getBody());
 			if (root.has("Search")) {
@@ -55,7 +57,6 @@ public class OmdbRestClientImpl implements OmdbRestClient {
 			e.printStackTrace();
 		}
 
-		List<Movie> movies = null;
 		if (Optional.ofNullable(moviesJson).isPresent()) {
 			try {
 				movies = mapper.readValue(moviesJson.toString(), new TypeReference<List<Movie>>() {
@@ -74,7 +75,77 @@ public class OmdbRestClientImpl implements OmdbRestClient {
 		 * 		.map(m -> m.getTitle())
 		 * 		.forEach(System.out::println);
 		 */
+		return movies;
+	}
 
+	@Override
+	public List<Movie> getAllMoviesByTitleAndYear(String title, String year) {
+
+		RestTemplate restTemplate = new RestTemplate();
+		ObjectMapper mapper = new ObjectMapper();
+
+		String totalResults = null;
+		JsonNode moviesJson = null;
+		List<Movie> pageMovies = null;
+		List<Movie> movies = null;
+
+		ResponseEntity<String> response = restTemplate.getForEntity(
+				REST_SERVICE_URI + "?s=" + title + "&y=" + year + "&plot=short&r=json&type=movie", String.class);
+
+		try {
+			JsonNode root = mapper.readTree(response.getBody());
+			if (root.has("totalResults")) {
+				totalResults = root.get("totalResults").asText();
+			}
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		if (Optional.ofNullable(totalResults).isPresent() && !totalResults.equals("0")) {
+
+			for (int page = 1; page <= (Integer.parseInt(totalResults) / 10); page++) {
+
+				response = restTemplate.getForEntity(
+						REST_SERVICE_URI + "?s=" + title + "&y=" + year + "&page=" + page + "&plot=short&r=json&type=movie", String.class);
+
+				try {
+					JsonNode root = mapper.readTree(response.getBody());
+					if (root.has("Search")) {
+						moviesJson = root.path("Search");
+					}
+				} catch (JsonProcessingException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				if (Optional.ofNullable(moviesJson).isPresent()) {
+					try {
+						pageMovies = mapper.readValue(moviesJson.toString(), new TypeReference<List<Movie>>() {
+						});
+					} catch (JsonParseException e) {
+						e.printStackTrace();
+					} catch (JsonMappingException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				if (Optional.ofNullable(movies).isPresent()) {
+					movies.addAll(pageMovies);
+				} else {
+					movies = pageMovies;
+				}
+			}
+		}
+
+		/*
+		 * movies.stream()
+		 * 		.map(m -> m.getTitle())
+		 * 		.forEach(System.out::println);
+		 */
 		return movies;
 	}
 

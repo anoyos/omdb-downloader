@@ -31,7 +31,8 @@ public class OmdbRestMovieReader implements ItemReader<Movie> {
 	@BeforeStep
 	public void getAllMovies(final StepExecution stepExecution) {
 		JobParameters parameters = stepExecution.getJobExecution().getJobParameters();
-		movies = omnbRestClient.getMoviesByTitleAndYear(parameters.getString("title"), parameters.getString("year"));
+		// movies = omnbRestClient.getAllMoviesByTitleAndYear(parameters.getString("title"), parameters.getString("year"));
+		movies = omnbRestClient.getFirstPageMoviesByTitleAndYear(parameters.getString("title"), parameters.getString("year"));
 	}
 
 	@Override

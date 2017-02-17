@@ -12,5 +12,8 @@ public interface OmdbRestClient {
 
 	public Movie getMovie(String imdbId);
 
-	public List<Movie> getMoviesByTitleAndYear(String title, String year);
+	public List<Movie> getFirstPageMoviesByTitleAndYear(String title, String year);
+	
+	public List<Movie> getAllMoviesByTitleAndYear(String title, String year);
+
 }

@@ -72,7 +72,8 @@ public class OmdbServiceImpl implements OmdbService {
 		if (title.isEmpty()) {
 			return "Nothing has been downloaded. Title doesn't set.";
 		} else {
-			List<Movie> movies = omnbRestClient.getMoviesByTitleAndYear(title, year);
+			// List<Movie> movies = omnbRestClient.getAllMoviesByTitleAndYear(title, year);
+			List<Movie> movies = omnbRestClient.getFirstPageMoviesByTitleAndYear(title, year);
 
 			movies.forEach(movie -> {
 				String imdbId = movie.getImdbId();
