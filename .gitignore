@@ -1,0 +1,11 @@
+.project
+.settings/
+.DS_Store
+
+*/.project
+*/.settings/
+*/.classpath
+*/.DS_Store
+
+*/target/
+*/bin/
